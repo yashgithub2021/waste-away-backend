@@ -4,7 +4,7 @@ var cors = require('cors');
 connectMongo();
 require('dotenv').config();
 const app = express()
-const port = 4000
+const port = process.env.PORT || 4000
 
 
 
