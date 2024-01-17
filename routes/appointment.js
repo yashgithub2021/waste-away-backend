@@ -83,16 +83,29 @@ router.post('/placeorder', fetchuser, async (req, res) => {
             }
         });
 
+        const today = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
         const mailOptions = {
             from: '"Waste Away Org 🚮" <wasteawayorg@gmail.com>',
             to: email,
             subject: 'New Order Placed',
-            text: 'A new order has been placed with the following details:\n' +
-                `Address: ${address}\n` +
-                `Date: ${date}\n` +
-                `Time: ${time}\n` +
-                `Status: ${status || 'pending'}` // Default to "pending" if not provided
+            text: `Dear Customer,
+
+    Thank you for choosing Waste Away Org for your waste management needs. We are delighted to inform you that a new order has been successfully placed. Here are the details:
+
+    - Order Placed On: ${today}
+    - Pickup Address: ${address}
+    - Pickup Date: ${date}
+    - Pickup Time: ${time}
+    - Status: ${status || 'Pending'}
+
+    If you have any questions or need further assistance, please feel free to contact us. We appreciate your business and look forward to serving you.
+
+    Best Regards,
+    Waste Away Org 🚮`
         };
+
+
 
         // Send the email
         transporter.sendMail(mailOptions, (error, info) => {
@@ -105,7 +118,7 @@ router.post('/placeorder', fetchuser, async (req, res) => {
 
 
         success = true
-        res.status(201).json({ savedOrder, success });
+        res.status(201).json({ savedOrder, success, email });
     } catch (error) {
         console.error('Error booking order:', error);
         res.status(500).json({ message: 'Server error' });

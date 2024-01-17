@@ -1,9 +1,10 @@
 require('dotenv').config();
 const mongoose = require('mongoose')
 const db = process.env.DATABASE_URL
+const url = 'mongodb://localhost:27017/Waste_Away'
 const connectMongo = async () => {
     try {
-        await mongoose.connect(db, {
+        await mongoose.connect(url, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });

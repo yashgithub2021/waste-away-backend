@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt')
 const fetchuser = require('../middleware/getUser')
 var jwt = require('jsonwebtoken');
 const JWT_TOKEN = process.env.JWT_TOKEN;
+const nodemailer = require('nodemailer'); // Import Nodemailer
 
 //Create User
 router.post('/createuser', async (req, res) => {
@@ -29,6 +30,41 @@ router.post('/createuser', async (req, res) => {
         });
 
         const savedUser = await newUser.save();
+
+        //Email confirmation 
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'wasteawayorg@gmail.com',
+                pass: 'nzai mqjg utjy uznt'
+            }
+        });
+
+        const mailOptions = {
+            from: '"Waste Away Org 🚮" <wasteawayorg@gmail.com>',
+            to: email,
+            subject: 'Welcome to Waste Away Org!',
+            text: `Dear Customer,
+        
+Welcome to Waste Away Org! We are excited to have you join our community dedicated to sustainable waste management.
+        
+As a member, you'll have access to a range of services designed to make waste management easy and environmentally friendly. Feel free to explore our platform, customize your preferences, and take advantage of our eco-friendly solutions.
+        
+If you have any questions or need assistance, our team is here to help. Thank you for choosing Waste Away Org, and we look forward to serving you.
+        
+Best Regards,
+Waste Away Org 🚮`
+        };
+
+
+        // Send the email
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log('Error sending email:', error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
 
         const data = {
             newUser: {
