@@ -4,7 +4,7 @@ const db = process.env.DATABASE_URL
 const url = 'mongodb://localhost:27017/Waste_Away'
 const connectMongo = async () => {
     try {
-        await mongoose.connect(url, {
+        await mongoose.connect(db, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         });
